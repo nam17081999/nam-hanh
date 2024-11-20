@@ -23,7 +23,7 @@ export default function App() {
         audioRef.current.play(); // Bắt đầu phát nhạc
         setIsPlaying(true); // Cập nhật trạng thái
       }
-    }, 500); // Delay 3 giây
+    }, 1000); // Delay 3 giây
 
     // Xóa timeout khi component bị unmount
     return () => clearTimeout(delay);
