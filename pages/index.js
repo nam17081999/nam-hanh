@@ -102,6 +102,9 @@ export default function App() {
 
   return (
     <div className='app-container'>
+      <Head>
+        <title>Nam ❤ Hạnh</title>
+      </Head>
       <audio
         ref={audioRef}
         src="/music.mp3" // Đường dẫn nhạc
