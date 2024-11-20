@@ -13,22 +13,6 @@ import { EffectCards } from 'swiper/modules';
 export default function App() {
   const canvasRef = useRef(null);
 
-  const [isPlaying, setIsPlaying] = useState(false); // Trạng thái phát nhạc
-  const audioRef = useRef(null);
-
-  useEffect(() => {
-    // Đặt thời gian delay
-    const delay = setTimeout(() => {
-      if (audioRef.current) {
-        audioRef.current.play(); // Bắt đầu phát nhạc
-        setIsPlaying(true); // Cập nhật trạng thái
-      }
-    }, 1000); // Delay 3 giây
-
-    // Xóa timeout khi component bị unmount
-    return () => clearTimeout(delay);
-  }, []);
-
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -104,9 +88,27 @@ export default function App() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const [isBlackScreenVisible, setIsBlackScreenVisible] = useState(true); // Màn đen ban đầu hiển thị
+  const audioRef = useRef(null);
+  
+
+  const handleBlackScreenClick = () => {
+    setIsBlackScreenVisible(false); // Ẩn màn đen
+    if (audioRef.current) {
+      audioRef.current.play(); // Bắt đầu phát nhạc
+    }
+  };
+
   return (
     <div className='app-container'>
-      
+      <audio
+        ref={audioRef}
+        src="/music.mp3" // Đường dẫn nhạc
+        loop
+        controls={false} // Không hiển thị điều khiển
+        muted={false} // Không tắt tiếng
+      />
       <canvas
         ref={canvasRef}
         style={{
@@ -151,13 +153,29 @@ export default function App() {
           className=''
         /></SwiperSlide>
       </Swiper>
-      <audio
-        ref={audioRef}
-        src="/music.mp3" // Đường dẫn nhạc
-        loop
-        // controls={false} // Không hiển thị điều khiển
-        muted={false} // Không tắt tiếng
-      />
+
+      <div
+          onClick={handleBlackScreenClick}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100vh",
+            backgroundColor: "black",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            cursor: "pointer",
+            display: !isBlackScreenVisible ? "none" : "flex"
+          }}
+          className='flex justify-center items-center flex-col'
+        ><div id="heart">
+        </div>
+        <h1 className='text-[#cc3333] text-[32px] font-bold'>Bấm vào trái tim
+      </h1></div>
+    
     </div>
   );
 }
